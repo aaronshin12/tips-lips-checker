@@ -4,60 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TIPS/LIPS 적합도 판독기 — TAP Angel Partners</title>
-<meta name="description" content="투자 검토 대상 기업의 TIPS·LIPS 프로그램 적합도를 9~10개 질문으로 진단합니다.">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   body{font-family:'Pretendard',-apple-system,'Noto Sans KR','Segoe UI',sans-serif;background:#fff;color:#111;-webkit-font-smoothing:antialiased}
   button{font-family:inherit}
   .wrap{max-width:480px;margin:0 auto;padding:28px 20px;min-height:100vh}
-  .hidden{display:none}
 </style>
 </head>
 <body>
-
 <div class="wrap" id="app"></div>
-
 <script>
-const TIPS_COLOR="#DB2777",LIPS_COLOR="#EA580C",BRAND="#2563EB",PENALTY=3,MAX=20;
+const TIPS_COLOR="#DB2777",LIPS_COLOR="#EA580C",BRAND="#2563EB",MAX=20;
 const QS=[
 {id:1,cat:"생활기반",label:"① 고객 정의",w:2,q:"제품/서비스를 주로 사용하는 고객은 누구인가요?",opts:[
-{t:"일반 개인소비자\n(의식주, 여가 등)",ty:"lips"},{t:"일반 소비자와\n기업 고객 모두 대상",ty:"both"},{t:"특정 전문가 또는\n기업 고객 (B2B)",ty:"tips"}],flag:null},
+{t:"일반 개인소비자\n(의식주, 여가 등)",ty:"lips"},{t:"일반 소비자와\n기업 고객 모두 대상",ty:"both"},{t:"특정 전문가 또는\n기업 고객 (B2B)",ty:"tips"}]},
 {id:2,cat:"생활기반",label:"② 선택 이유",w:2,q:"고객은 왜 이 제품/서비스를 선택하나요?",opts:[
-{t:"브랜드, 감성,\n사용 경험 중심",ty:"lips"},{t:"감성과 기능 모두\n고려하여 선택",ty:"both"},{t:"성능, 기능,\n기술력 중심의 효율",ty:"tips"}],flag:null},
+{t:"브랜드, 감성,\n사용 경험 중심",ty:"lips"},{t:"감성과 기능 모두\n고려하여 선택",ty:"both"},{t:"성능, 기능,\n기술력 중심의 효율",ty:"tips"}]},
 {id:3,cat:"서비스혁신",label:"③ 사업 모델",w:3,q:"어떤 방식으로 매출을 창출하나요?",opts:[
-{t:"유통 구조 / 연결 방식 /\n사용자 경험의 재정의",ty:"lips"},{t:"경험 혁신과\n기술 개발이 혼재",ty:"both"},{t:"신기술 개발 /\n시스템 고도화 /\n프로세스 효율화",ty:"tips"}],flag:null},
+{t:"유통 구조 / 연결 방식 /\n사용자 경험의 재정의",ty:"lips"},{t:"경험 혁신과\n기술 개발이 혼재",ty:"both"},{t:"신기술 개발 /\n시스템 고도화 /\n프로세스 효율화",ty:"tips"}]},
 {id:4,cat:"서비스혁신",label:"④ 사업 확장",w:2,q:"사업모델은 어떤 방식으로 가맹점 또는 파트너와 협력하나요?",opts:[
-{t:"독자 콘텐츠/서비스 기반\n가맹점 운영 또는\n로컬 연계 브랜드 확장",ty:"lips"},{t:"독자 브랜드와 기존 제품\n가맹이 혼재",ty:"both"},{t:"기존 제품·서비스의\n가맹점 또는 대리점",ty:"tips"}],flag:"ld"},
+{t:"독자 콘텐츠/서비스 기반\n가맹점 운영 또는\n로컬 연계 브랜드 확장",ty:"lips"},{t:"독자 브랜드와 기존 제품\n가맹이 혼재",ty:"both"},{t:"기존 제품·서비스의\n가맹점 또는 대리점",ty:"tips"}]},
 {id:5,cat:"제조기반",label:"⑤ 제조 인프라",w:2,q:"직접 또는 위탁을 통해 제품을 생산하거나, 사업 운영에 물류/품질/재고/공간관리와 같은 물리적 인프라 요소가 필요한가요?",opts:[
-{t:"예\n생산·위탁 또는\n제조 인프라 필수",ty:"lips"},{t:"일부 인프라 필요하나\n핵심은 아님",ty:"both"},{t:"아니요\n물리적 인프라 불필요",ty:"tips"}],flag:null,branch:true},
+{t:"예\n생산·위탁 또는\n제조 인프라 필수",ty:"lips"},{t:"일부 인프라 필요하나\n핵심은 아님",ty:"both"},{t:"아니요\n물리적 인프라 불필요",ty:"tips"}]},
 {id:6,cat:"제조기반",label:"⑥ 고객 도달 방식",w:2,q:"[플랫폼 기업 검토] 제품/서비스가 고객에게 도달하는 과정에서 귀사는 어떤 역할에 더 가까운가요?",opts:[
-{t:"제품기획 / 브랜딩 /\n고객경험 전체 설계",ty:"lips"},{t:"기획과 기술 매칭\n역할을 병행",ty:"both"},{t:"기술기반 매칭 /\n중개 중심 플랫폼 운영",ty:"tips"}],flag:"ld",cond:true},
+{t:"제품기획 / 브랜딩 /\n고객경험 전체 설계",ty:"lips"},{t:"기획과 기술 매칭\n역할을 병행",ty:"both"},{t:"기술기반 매칭 /\n중개 중심 플랫폼 운영",ty:"tips"}],cond:true},
 {id:7,cat:"기술기반",label:"⑦ 핵심 역량",w:3,q:"사업의 핵심 경쟁력은 어디에 있나요?",opts:[
-{t:"기획력, 사업 경험,\n고객경험 설계 등\n브랜드 역량",ty:"lips"},{t:"브랜드 역량과\n기술역량이 균형",ty:"both"},{t:"기술력, IP 특허,\n엔지니어링 등\n기술역량",ty:"tips"}],flag:null},
+{t:"기획력, 사업 경험,\n고객경험 설계 등\n브랜드 역량",ty:"lips"},{t:"브랜드 역량과\n기술역량이 균형",ty:"both"},{t:"기술력, IP 특허,\n엔지니어링 등\n기술역량",ty:"tips"}]},
 {id:8,cat:"기술기반",label:"⑧ 기술 활용",w:2,q:"기술을 활용하는 주 목적은 무엇인가요?",opts:[
-{t:"고객의 문제해결을\n위한 수단",ty:"lips"},{t:"문제해결과 기술\n고도화를 동시 추구",ty:"both"},{t:"기술 자체의\n성장과 고도화",ty:"tips"}],flag:null},
+{t:"고객의 문제해결을\n위한 수단",ty:"lips"},{t:"문제해결과 기술\n고도화를 동시 추구",ty:"both"},{t:"기술 자체의\n성장과 고도화",ty:"tips"}]},
 {id:9,cat:"기술기반",label:"⑨ 인력 구성",w:2,q:"핵심인력(창업자 포함)은 어떤 전문성을 중심으로 구성되어 있나요?",opts:[
-{t:"브랜드 마케터,\n서비스 기획자,\n제품 MD 등",ty:"lips"},{t:"기획/마케팅과\n기술/연구 인력이 혼합",ty:"both"},{t:"AI 개발자,\n전공 박사급\n연구자 등",ty:"tips"}],flag:null},
+{t:"브랜드 마케터,\n서비스 기획자,\n제품 MD 등",ty:"lips"},{t:"기획/마케팅과\n기술/연구 인력이 혼합",ty:"both"},{t:"AI 개발자,\n전공 박사급\n연구자 등",ty:"tips"}]},
 {id:10,cat:"기술기반",label:"⑩ 사업 전략",w:2,q:"향후 사업의 핵심 전략은 어디에 초점을 두고 있습니까?",opts:[
-{t:"초기 매출·시장 검증\n→ 투자 유치 및\n수익 확장 전략",ty:"lips"},{t:"시장 검증과 기술\n검증을 병행",ty:"both"},{t:"기술·데이터 기반\n검증 → 투자 중심\n성장 전략",ty:"tips"}],flag:null}
+{t:"초기 매출·시장 검증\n→ 투자 유치 및\n수익 확장 전략",ty:"lips"},{t:"시장 검증과 기술\n검증을 병행",ty:"both"},{t:"기술·데이터 기반\n검증 → 투자 중심\n성장 전략",ty:"tips"}]}
 ];
 
 let phase="intro",step=0,answers={},detailOpen=false;
-const $=id=>document.getElementById(id);
-const app=$("app");
-
+const app=document.getElementById("app");
 function vis(){return QS.filter(q=>!(q.id===6&&answers[5]!=="tips"))}
 function gr(s){const p=Math.max(0,s)/MAX*100;if(p>=75)return{k:"fit",l:"적합",d:"해당 프로그램에 높은 부합도"};if(p>=50)return{k:"pos",l:"긍정적",d:"방향성은 맞으나 일부 경계 요소"};if(p>=25)return{k:"neg",l:"부정적",d:"프로그램과 방향 불일치 다수"};return{k:"unf",l:"부적합",d:"해당 프로그램 대상이 아님"}}
-function calc(){let l=0,t=0,p=0;QS.forEach(q=>{const a=answers[q.id];if(!a)return;const h=Math.ceil(q.w/2);if(a==="lips")l+=q.w;else if(a==="tips")t+=q.w;else{l+=h;t+=h}if(a==="tips"&&q.flag==="ld")p+=PENALTY});return{lips:l-p,tips:t,pen:p}}
+function calc(){let l=0,t=0;QS.forEach(q=>{const a=answers[q.id];if(!a)return;const h=Math.ceil(q.w/2);if(a==="lips")l+=q.w;else if(a==="tips")t+=q.w;else{l+=h;t+=h}});return{lips:l,tips:t}}
 function tC(ty){return ty==="lips"?LIPS_COLOR:ty==="tips"?TIPS_COLOR:"#6B7280"}
 function tBg(ty){return ty==="lips"?"#FFF7ED":ty==="tips"?"#FCE7F3":"#F3F4F6"}
 function tL(ty){return ty==="lips"?"LIPS형":ty==="tips"?"TIPS형":"복합"}
-function sBg(ty){return ty==="lips"?"#FFF7ED":ty==="tips"?"#FDF2F8":"#F9FAFB"}
-function sB(ty){return ty==="lips"?LIPS_COLOR:ty==="tips"?TIPS_COLOR:"#9CA3AF"}
-const STEPS=[{k:"unf",l:"부적합",r:"0~4"},{k:"neg",l:"부정적",r:"5~9"},{k:"pos",l:"긍정적",r:"10~14"},{k:"fit",l:"적합",r:"15~20"}];
-
 function nl(s){return s.replace(/\n/g,"<br>")}
 function flat(s){return s.replace(/\n/g," ")}
+const STEPS=[{k:"unf",l:"부적합",r:"0~4"},{k:"neg",l:"부정적",r:"5~9"},{k:"pos",l:"긍정적",r:"10~14"},{k:"fit",l:"적합",r:"15~20"}];
 
 function render(){
   if(phase==="intro")renderIntro();
@@ -68,12 +59,11 @@ function render(){
 function renderIntro(){
   app.innerHTML=`
   <div style="text-align:center;padding-top:56px;margin-bottom:56px">
-    <div style="font-size:14px;font-weight:700;color:${BRAND};letter-spacing:2px;margin-bottom:14px">TAP ANGEL PARTNERS</div>
     <h1 style="font-size:32px;font-weight:900;line-height:1.3">TIPS / LIPS<br>적합도 판독기</h1>
     <p style="font-size:17px;color:#777;margin-top:20px;line-height:1.75">투자 검토 대상 기업의 사업 성격을<br>9~10개 질문으로 진단하여<br>TIPS·LIPS 각 프로그램 적합도를<br>4점 척도로 산출합니다.</p>
   </div>
   <button onclick="phase='quiz';render()" style="width:100%;padding:20px 0;font-size:20px;font-weight:800;background:${BRAND};color:#fff;border:none;border-radius:14px;cursor:pointer">판독 시작</button>
-  <div style="text-align:center;margin-top:32px;font-size:13px;color:#bbb">v0.1 · 내부 테스트용</div>`;
+  <div style="text-align:center;margin-top:32px;font-size:13px;color:#bbb">v0.2 · 내부 테스트용</div>`;
 }
 
 function renderQuiz(){
@@ -83,18 +73,19 @@ function renderQuiz(){
     <span style="font-size:16px;font-weight:700;color:${BRAND}">${step+1} / ${total}</span>
     ${step>0?`<button onclick="step--;render()" style="font-size:15px;color:#888;background:none;border:none;cursor:pointer;padding:4px 10px">← 이전</button>`:""}
   </div>
-  <div style="height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:36px">
+  <div style="height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:32px">
     <div style="height:100%;width:${pct}%;background:${BRAND};border-radius:3px;transition:width 0.3s"></div>
   </div>
-  <div style="display:inline-block;font-size:14px;font-weight:700;color:${BRAND};background:#EFF6FF;padding:7px 16px;border-radius:20px;margin-bottom:16px">${cur.cat}</div>
-  <div style="font-size:19px;font-weight:800;margin-bottom:12px">${cur.label}</div>
-  <div style="font-size:19px;font-weight:500;line-height:1.65;margin-bottom:36px">${cur.q}</div>
-  <div style="display:flex;flex-direction:column;gap:12px">`;
+  <div style="display:inline-block;font-size:14px;font-weight:700;color:${BRAND};background:#EFF6FF;padding:7px 16px;border-radius:20px;margin-bottom:14px">${cur.cat}</div>
+  <div style="font-size:19px;font-weight:800;margin-bottom:10px">${cur.label}</div>
+  <div style="font-size:19px;font-weight:500;line-height:1.65;margin-bottom:28px">${cur.q}</div>
+  <div style="display:flex;flex-direction:column;gap:10px">`;
   cur.opts.forEach((o,i)=>{
     const sel=answers[cur.id]===o.ty;
-    h+=`<button onclick="pickOpt(${cur.id},'${o.ty}')" style="width:100%;padding:20px 16px;text-align:center;font-size:17px;line-height:1.6;white-space:pre-line;background:${sel?sBg(o.ty):'#fafafa'};border:${sel?'2.5px solid '+sB(o.ty):'1.5px solid #e5e5e5'};border-radius:14px;cursor:pointer;color:#222;font-weight:${sel?700:400};position:relative;transition:all 0.15s">
-      <div style="position:absolute;top:10px;right:12px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:${tBg(o.ty)};color:${tC(o.ty)}">${tL(o.ty)}</div>
-      ${nl(o.t)}</button>`;
+    const bg=sel?(o.ty==="lips"?"#FFF7ED":o.ty==="tips"?"#FDF2F8":"#F9FAFB"):"#fafafa";
+    const bc=sel?(o.ty==="lips"?LIPS_COLOR:o.ty==="tips"?TIPS_COLOR:"#9CA3AF"):"#e5e5e5";
+    const bw=sel?"2.5px":"1.5px";
+    h+=`<button onclick="pickOpt(${cur.id},'${o.ty}')" style="width:100%;padding:14px 16px;text-align:center;font-size:17px;line-height:1.55;white-space:pre-line;background:${bg};border:${bw} solid ${bc};border-radius:14px;cursor:pointer;color:#222;font-weight:${sel?700:400};transition:all 0.15s">${nl(o.t)}</button>`;
   });
   h+=`</div>`;
   if(cur.cond)h+=`<div style="margin-top:16px;padding:14px 16px;font-size:15px;line-height:1.7;background:#f0f0f0;border-radius:12px;color:#888">ℹ ⑤에서 "아니요" 선택 시에만 노출되는 플랫폼 기업 검토 질문입니다.</div>`;
@@ -126,7 +117,7 @@ function gradeBar(score,label,pc){
 }
 
 function renderResult(){
-  const{lips,tips,pen}=calc(),tg=gr(tips),lg=gr(lips);
+  const{lips,tips}=calc(),tg=gr(tips),lg=gr(lips);
   let h=`
   <div style="text-align:center;margin-bottom:40px;padding-top:16px">
     <div style="font-size:15px;font-weight:700;color:${BRAND};margin-bottom:8px">판독 완료</div>
@@ -134,17 +125,10 @@ function renderResult(){
   </div>`;
   h+=gradeBar(tips,"TIPS 적합도",TIPS_COLOR);
   h+=gradeBar(lips,"LIPS 적합도",LIPS_COLOR);
-  if(pen>0){
-    h+=`<div style="padding:16px 18px;background:#FFF7ED;border-radius:12px;font-size:16px;color:#9A3412;line-height:1.7;margin-bottom:28px">
-    ⚠ LIPS 부적합 플래그: <b>-${pen}점</b> 페널티 적용`;
-    if(answers[4]==="tips")h+=`<br>· ④ 사업확장: 기존 제품 가맹점/대리점`;
-    if(answers[6]==="tips")h+=`<br>· ⑥ 고객도달: 기술기반 플랫폼`;
-    h+=`</div>`;
-  }
   h+=`<div style="border:1.5px solid #e5e5e5;border-radius:14px;margin-bottom:28px;overflow:hidden">
     <button onclick="detailOpen=!detailOpen;render()" style="width:100%;padding:18px 22px;font-size:17px;font-weight:700;background:#f5f7fa;color:#222;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
       <span>항목별 응답 내역</span>
-      <span style="font-size:14px;color:#999;transition:transform 0.2s;transform:rotate(${detailOpen?180:0}deg)">▼</span>
+      <span style="font-size:14px;color:#999;transition:transform 0.2s;display:inline-block;transform:rotate(${detailOpen?180:0}deg)">▼</span>
     </button>`;
   if(detailOpen){
     h+=`<div style="padding:4px 22px 18px">`;
@@ -153,7 +137,7 @@ function renderResult(){
       h+=`<div style="padding:14px 0;border-bottom:1px solid #e5e5e5;font-size:16px;line-height:1.6">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
           <span style="font-weight:700">${q.label}</span>
-          <span style="font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px;background:${tBg(a)};color:${tC(a)}">${tL(a)}${q.flag==="ld"&&a==="tips"?" ⚠":""}</span>
+          <span style="font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px;background:${tBg(a)};color:${tC(a)}">${tL(a)}</span>
         </div>
         <div style="color:#777;font-size:15px">${flat(o.t)}</div>
       </div>`;
@@ -165,20 +149,19 @@ function renderResult(){
     <button onclick="phase='intro';step=0;answers={};detailOpen=false;render()" style="flex:1;padding:18px 0;font-size:17px;font-weight:700;background:#f0f0f0;color:#555;border:1.5px solid #ddd;border-radius:14px;cursor:pointer">새 판독</button>
     <button onclick="copyResult()" style="flex:1;padding:18px 0;font-size:17px;font-weight:700;background:${BRAND};color:#fff;border:none;border-radius:14px;cursor:pointer">결과 복사</button>
   </div>
-  <div style="text-align:center;font-size:13px;color:#bbb;padding-bottom:24px">TAP Angel Partners · 2026 LIPS 유형 가이드 기반 · v0.1</div>`;
+  <div style="text-align:center;font-size:13px;color:#bbb;padding-bottom:24px">TAP Angel Partners · 2026 LIPS 유형 가이드 기반 · v0.2</div>`;
   app.innerHTML=h;
 }
 
 function copyResult(){
-  const{lips,tips,pen}=calc(),tg=gr(tips),lg=gr(lips);
-  const t=`[TIPS-LIPS 판독 결과]\nTIPS: ${tg.l} (${Math.max(0,tips)}/${MAX})\nLIPS: ${lg.l} (${Math.max(0,lips)}/${MAX})${pen>0?`\n⚠ LIPS 페널티: -${pen}점`:""}`;
+  const{lips,tips}=calc(),tg=gr(tips),lg=gr(lips);
+  const t=`[TIPS-LIPS 판독 결과]\nTIPS: ${tg.l} (${Math.max(0,tips)}/${MAX})\nLIPS: ${lg.l} (${Math.max(0,lips)}/${MAX})`;
   navigator.clipboard.writeText(t).then(()=>{
     const b=document.querySelector('[onclick="copyResult()"]');
     if(b){b.textContent="복사 완료 ✓";setTimeout(()=>{b.textContent="결과 복사"},1500)}
   }).catch(()=>{});
 }
 
- 
 render();
 </script>
 </body>
