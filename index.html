@@ -6,17 +6,29 @@
 <title>TIPS/LIPS 검토 체크리스트</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Pretendard',-apple-system,'Noto Sans KR',sans-serif;background:#fff;color:#111;-webkit-font-smoothing:antialiased}
+body{font-family:'Pretendard',-apple-system,'Noto Sans KR',sans-serif;background:#0f1117;color:#e4e4e7;-webkit-font-smoothing:antialiased}
 button{font-family:inherit}
 .w{max-width:480px;margin:0 auto;padding:28px 20px;min-height:100vh}
 .btn{width:100%;padding:18px 0;font-size:18px;font-weight:700;border:none;border-radius:14px;cursor:pointer;margin-bottom:12px;transition:opacity .15s}
 .btn:active{opacity:.8}
+.card{background:#1a1b23;border:1px solid #2a2b35;border-radius:14px}
+.dim{color:#71717a}
+.disclaimer{margin-top:16px;padding:12px 16px;font-size:12px;line-height:1.7;color:#71717a;background:#1a1b23;border:1px solid #2a2b35;border-radius:10px;text-align:center}
 </style>
 </head>
 <body>
 <div class="w" id="app"></div>
 <script>
-const B="#2563EB",TP="#DB2777",LP="#EA580C",MX=20;
+/* ============================================================
+   🔒 비밀번호 설정
+   아래 값을 변경하면 비밀번호가 바뀝니다.
+   ============================================================ */
+const PASSWORD = "0831";
+/* ============================================================ */
+
+const B="#3b82f6",TP="#f472b6",LP="#fb923c",MX=20;
+const BG="#0f1117",CARD="#1a1b23",BORDER="#2a2b35",TXT="#e4e4e7",DIM="#71717a",INPUT_BG="#23242e";
+
 const FQ=[
 {id:1,cat:"생활기반",lb:"① 고객 정의",w:2,q:"제품/서비스를 주로 사용하는 고객은 누구인가요?",o:[{t:"일반 개인소비자\n(의식주, 여가 등)",y:"l"},{t:"일반 소비자와\n기업 고객 모두 대상",y:"b"},{t:"특정 전문가 또는\n기업 고객 (B2B)",y:"t"}]},
 {id:2,cat:"생활기반",lb:"② 선택 이유",w:2,q:"고객은 왜 이 제품/서비스를 선택하나요?",o:[{t:"브랜드, 감성,\n사용 경험 중심",y:"l"},{t:"감성과 기능 모두\n고려하여 선택",y:"b"},{t:"성능, 기능,\n기술력 중심의 효율",y:"t"}]},
@@ -45,7 +57,9 @@ const LQ=[
 {q:"정책자금 융자 제외 업종에 해당하나요?",o:["해당 없음 (지원 가능)","해당됨 (제외 업종)"],pass:0,info:"제외 업종은 지원 불가."}
 ];
 
-let ph="home",st=0,ans={},dO=false,cAns=[],cType="";
+const DISC="⚠️ 본 결과는 내부 참고용 사전 스크리닝이며, 공식 심사 판정이 아닙니다.";
+
+let ph="lock",st=0,ans={},dO=false,cAns=[],cType="",pwErr=false;
 const $=document.getElementById("app");
 const nl=s=>s.replace(/\n/g,"<br>");
 const fl=s=>s.replace(/\n/g," ");
@@ -55,21 +69,46 @@ function vis(){return FQ.filter(q=>!(q.id===6&&ans[5]!=="t"))}
 function calc(){let l=0,t=0;FQ.forEach(q=>{const a=ans[q.id];if(!a)return;const h=Math.ceil(q.w/2);if(a==="l")l+=q.w;else if(a==="t")t+=q.w;else{l+=h;t+=h}});return{l,t}}
 
 function R(){
-  if(ph==="home")rHome();
+  if(ph==="lock")rLock();
+  else if(ph==="home")rHome();
   else if(ph==="fit")rFit();
   else if(ph==="fitR")rFitR();
   else if(ph==="cond")rCond();
   else if(ph==="condR")rCondR();
 }
+
+/* LOCK */
+function rLock(){
+  $.innerHTML=`
+  <div style="text-align:center;padding-top:80px;margin-bottom:40px">
+    <div style="font-size:48px;margin-bottom:16px">🔒</div>
+    <h1 style="font-size:26px;font-weight:900;color:${TXT}">접근 제한</h1>
+    <p style="font-size:15px;color:${DIM};margin-top:12px">비밀번호를 입력해주세요</p>
+  </div>
+  <input id="pwInput" type="password" inputmode="numeric" placeholder="비밀번호 입력"
+    onkeydown="if(event.key==='Enter')checkPw()"
+    style="width:100%;padding:16px;font-size:18px;text-align:center;background:${INPUT_BG};color:${TXT};border:1.5px solid ${pwErr?'#ef4444':BORDER};border-radius:14px;outline:none;margin-bottom:12px;letter-spacing:8px">
+  ${pwErr?`<div style="text-align:center;font-size:14px;color:#ef4444;margin-bottom:12px">비밀번호가 일치하지 않습니다</div>`:""}
+  <button class="btn" onclick="checkPw()" style="background:${B};color:#fff">확인</button>
+  <div style="text-align:center;margin-top:32px;font-size:13px;color:#3f3f46">MAR 2026 by TAP</div>`;
+  setTimeout(()=>{const el=document.getElementById("pwInput");if(el)el.focus()},100);
+}
+function checkPw(){
+  const v=document.getElementById("pwInput").value;
+  if(v===PASSWORD){pwErr=false;ph="home";R()}
+  else{pwErr=true;R()}
+}
+
+/* HOME */
 function rHome(){
   $.innerHTML=`
   <div style="text-align:center;padding-top:48px;margin-bottom:48px">
-    <h1 style="font-size:30px;font-weight:900;line-height:1.35">📋 TIPS / LIPS<br>검토 체크리스트</h1>
+    <h1 style="font-size:30px;font-weight:900;line-height:1.35;color:${TXT}">📋 TIPS / LIPS<br>검토 체크리스트</h1>
   </div>
   <button class="btn" onclick="ph='fit';st=0;ans={};dO=false;R()" style="background:${B};color:#fff;font-size:20px;padding:20px 0">🔍 TIPS/LIPS 적합도 테스트</button>
   <button class="btn" onclick="startCond('tips')" style="background:${TP};color:#fff">🩷 TIPS 지원조건 체크</button>
   <button class="btn" onclick="startCond('lips')" style="background:${LP};color:#fff">🧡 LIPS 지원조건 체크</button>
-  <div style="text-align:center;margin-top:36px;font-size:13px;color:#bbb">MAR 2026 by TAP</div>`;
+  <div style="text-align:center;margin-top:36px;font-size:13px;color:#3f3f46">MAR 2026 by TAP</div>`;
 }
 function startCond(type){cType=type;cAns=[];st=0;ph="cond";R()}
 
@@ -78,21 +117,21 @@ function rFit(){
   const vq=vis(),tot=vq.length,c=vq[st],pct=(st/tot)*100;
   let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span style="font-size:16px;font-weight:700;color:${B}">🔍 ${st+1} / ${tot}</span>
-    ${st>0?`<button onclick="st--;R()" style="font-size:15px;color:#888;background:none;border:none;cursor:pointer">← 이전</button>`:""}
+    ${st>0?`<button onclick="st--;R()" style="font-size:15px;color:${DIM};background:none;border:none;cursor:pointer">← 이전</button>`:""}
   </div>
-  <div style="height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:32px"><div style="height:100%;width:${pct}%;background:${B};border-radius:3px;transition:width .3s"></div></div>
-  <div style="display:inline-block;font-size:14px;font-weight:700;color:${B};background:#EFF6FF;padding:7px 16px;border-radius:20px;margin-bottom:14px">${c.cat}</div>
-  <div style="font-size:19px;font-weight:800;margin-bottom:10px">${c.lb}</div>
-  <div style="font-size:19px;font-weight:500;line-height:1.65;margin-bottom:28px">${c.q}</div>
+  <div style="height:6px;background:${BORDER};border-radius:3px;margin-bottom:32px"><div style="height:100%;width:${pct}%;background:${B};border-radius:3px;transition:width .3s"></div></div>
+  <div style="display:inline-block;font-size:14px;font-weight:700;color:${B};background:#1e293b;padding:7px 16px;border-radius:20px;margin-bottom:14px">${c.cat}</div>
+  <div style="font-size:19px;font-weight:800;margin-bottom:10px;color:${TXT}">${c.lb}</div>
+  <div style="font-size:19px;font-weight:500;line-height:1.65;margin-bottom:28px;color:#a1a1aa">${c.q}</div>
   <div style="display:flex;flex-direction:column;gap:10px">`;
   c.o.forEach(o=>{
     const s=ans[c.id]===o.y;
-    const bg=s?(o.y==="l"?"#FFF7ED":o.y==="t"?"#FDF2F8":"#F9FAFB"):"#fafafa";
-    const bc=s?(o.y==="l"?LP:o.y==="t"?TP:"#9CA3AF"):"#e5e5e5";
-    h+=`<button onclick="pFit(${c.id},'${o.y}')" style="width:100%;padding:14px 16px;text-align:center;font-size:17px;line-height:1.55;white-space:pre-line;background:${bg};border:${s?'2.5px':'1.5px'} solid ${bc};border-radius:14px;cursor:pointer;color:#222;font-weight:${s?700:400}">${nl(o.t)}</button>`;
+    const bg=s?(o.y==="l"?"#431407":o.y==="t"?"#500724":"#1f2937"):INPUT_BG;
+    const bc=s?(o.y==="l"?LP:o.y==="t"?TP:"#6b7280"):BORDER;
+    h+=`<button onclick="pFit(${c.id},'${o.y}')" style="width:100%;padding:14px 16px;text-align:center;font-size:17px;line-height:1.55;white-space:pre-line;background:${bg};border:${s?'2.5px':'1.5px'} solid ${bc};border-radius:14px;cursor:pointer;color:${TXT};font-weight:${s?700:400}">${nl(o.t)}</button>`;
   });
   h+=`</div>`;
-  if(c.cd)h+=`<div style="margin-top:16px;padding:14px 16px;font-size:15px;line-height:1.7;background:#f0f0f0;border-radius:12px;color:#888">ℹ ⑤에서 "아니요" 선택 시에만 노출됩니다.</div>`;
+  if(c.cd)h+=`<div style="margin-top:16px;padding:14px 16px;font-size:15px;line-height:1.7;background:${CARD};border:1px solid ${BORDER};border-radius:12px;color:${DIM}">ℹ ⑤에서 "아니요" 선택 시에만 노출됩니다.</div>`;
   $.innerHTML=h;
 }
 function pFit(id,ty){
@@ -105,24 +144,26 @@ function pFit(id,ty){
 function gBar(sc,lb,pc){
   const g=gr(sc),s=Math.max(0,sc);
   let h=`<div style="margin-bottom:36px"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><span style="font-size:20px;font-weight:800;color:${pc}">${lb}</span><span style="font-size:18px;font-weight:700;color:${pc}">${s}/${MX}점</span></div><div style="display:flex;gap:5px">`;
-  STP.forEach(x=>{const a=x.k===g.k;h+=`<div style="flex:1;padding:14px 0;text-align:center;border-radius:12px;background:${a?pc:'#f0f0f0'};color:${a?'#fff':'#bbb'};font-weight:${a?800:500};font-size:15px;${a?'':`border:1px solid #e5e5e5`}"><div>${x.l}</div><div style="font-size:11px;margin-top:3px;opacity:${a?.85:.5}">${x.r}점</div></div>`});
+  STP.forEach(x=>{const a=x.k===g.k;h+=`<div style="flex:1;padding:14px 0;text-align:center;border-radius:12px;background:${a?pc:CARD};color:${a?'#fff':DIM};font-weight:${a?800:500};font-size:15px;${a?'':`border:1px solid ${BORDER}`}"><div>${x.l}</div><div style="font-size:11px;margin-top:3px;opacity:${a?.85:.5}">${x.r}점</div></div>`});
   h+=`</div><div style="font-size:15px;color:${pc};font-weight:600;margin-top:10px">${g.d}</div></div>`;return h;
 }
 function rFitR(){
   const{l,t}=calc();
-  const tBg=ty=>ty==="l"?"#FFF7ED":ty==="t"?"#FCE7F3":"#F3F4F6";
-  const tC=ty=>ty==="l"?LP:ty==="t"?TP:"#6B7280";
+  const tBg=ty=>ty==="l"?"#431407":ty==="t"?"#500724":"#1f2937";
+  const tC=ty=>ty==="l"?LP:ty==="t"?TP:"#6b7280";
   const tL=ty=>ty==="l"?"LIPS형":ty==="t"?"TIPS형":"복합";
-  let h=`<div style="text-align:center;margin-bottom:40px;padding-top:16px"><div style="font-size:15px;font-weight:700;color:${B};margin-bottom:8px">🔍 판독 완료</div><h2 style="font-size:26px;font-weight:900">적합도 결과</h2></div>`;
+  let h=`<div style="text-align:center;margin-bottom:40px;padding-top:16px"><div style="font-size:15px;font-weight:700;color:${B};margin-bottom:8px">🔍 판독 완료</div><h2 style="font-size:26px;font-weight:900;color:${TXT}">적합도 결과</h2></div>`;
   h+=gBar(t,"🩷 TIPS 적합도",TP);
   h+=gBar(l,"🧡 LIPS 적합도",LP);
-  h+=`<div style="border:1.5px solid #e5e5e5;border-radius:14px;margin-bottom:28px;overflow:hidden"><button onclick="dO=!dO;R()" style="width:100%;padding:18px 22px;font-size:17px;font-weight:700;background:#f5f7fa;color:#222;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center"><span>📝 항목별 응답 내역</span><span style="font-size:14px;color:#999;display:inline-block;transform:rotate(${dO?180:0}deg)">▼</span></button>`;
-  if(dO){h+=`<div style="padding:4px 22px 18px">`;FQ.filter(q=>ans[q.id]).forEach(q=>{const a=ans[q.id],o=q.o.find(x=>x.y===a);h+=`<div style="padding:14px 0;border-bottom:1px solid #e5e5e5;font-size:16px;line-height:1.6"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:700">${q.lb}</span><span style="font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px;background:${tBg(a)};color:${tC(a)}">${tL(a)}</span></div><div style="color:#777;font-size:15px">${fl(o.t)}</div></div>`});h+=`</div>`}
+  h+=`<div style="border:1.5px solid ${BORDER};border-radius:14px;margin-bottom:28px;overflow:hidden"><button onclick="dO=!dO;R()" style="width:100%;padding:18px 22px;font-size:17px;font-weight:700;background:${CARD};color:${TXT};border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center"><span>📝 항목별 응답 내역</span><span style="font-size:14px;color:${DIM};display:inline-block;transform:rotate(${dO?180:0}deg)">▼</span></button>`;
+  if(dO){h+=`<div style="padding:4px 22px 18px;background:${CARD}">`;FQ.filter(q=>ans[q.id]).forEach(q=>{const a=ans[q.id],o=q.o.find(x=>x.y===a);h+=`<div style="padding:14px 0;border-bottom:1px solid ${BORDER};font-size:16px;line-height:1.6"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:700;color:${TXT}">${q.lb}</span><span style="font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px;background:${tBg(a)};color:${tC(a)}">${tL(a)}</span></div><div style="color:${DIM};font-size:15px">${fl(o.t)}</div></div>`});h+=`</div>`}
   h+=`</div>`;
-  h+=`<button class="btn" onclick="ph='home';R()" style="background:#f0f0f0;color:#555;border:1.5px solid #ddd">🏠 첫 화면</button>`;
+  h+=`<div class="disclaimer">${DISC}</div>`;
+  h+=`<div style="margin-top:20px"></div>`;
+  h+=`<button class="btn" onclick="ph='home';R()" style="background:${CARD};color:${TXT};border:1.5px solid ${BORDER}">🏠 첫 화면</button>`;
   h+=`<button class="btn" onclick="startCond('tips')" style="background:${TP};color:#fff">🩷 TIPS 지원조건 체크</button>`;
   h+=`<button class="btn" onclick="startCond('lips')" style="background:${LP};color:#fff">🧡 LIPS 지원조건 체크</button>`;
-  h+=`<div style="text-align:center;font-size:13px;color:#bbb;padding:12px 0">MAR 2026 by TAP</div>`;
+  h+=`<div style="text-align:center;font-size:13px;color:#3f3f46;padding:12px 0">MAR 2026 by TAP</div>`;
   $.innerHTML=h;
 }
 
@@ -135,16 +176,16 @@ function rCond(){
   const nm=cType==="tips"?"TIPS":"LIPS";
   let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span style="font-size:16px;font-weight:700;color:${pc}">${em} ${nm} ${st+1}/${tot}</span>
-    ${st>0?`<button onclick="st--;cAns.pop();R()" style="font-size:15px;color:#888;background:none;border:none;cursor:pointer">← 이전</button>`:""}
+    ${st>0?`<button onclick="st--;cAns.pop();R()" style="font-size:15px;color:${DIM};background:none;border:none;cursor:pointer">← 이전</button>`:""}
   </div>
-  <div style="height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:32px"><div style="height:100%;width:${pct}%;background:${pc};border-radius:3px;transition:width .3s"></div></div>
-  <div style="font-size:20px;font-weight:600;line-height:1.6;margin-bottom:28px">${c.q}</div>
+  <div style="height:6px;background:${BORDER};border-radius:3px;margin-bottom:32px"><div style="height:100%;width:${pct}%;background:${pc};border-radius:3px;transition:width .3s"></div></div>
+  <div style="font-size:20px;font-weight:600;line-height:1.6;margin-bottom:28px;color:${TXT}">${c.q}</div>
   <div style="display:flex;flex-direction:column;gap:10px">`;
   c.o.forEach((o,i)=>{
-    h+=`<button onclick="pCond(${i})" style="width:100%;padding:16px;text-align:center;font-size:17px;line-height:1.5;background:#fafafa;border:1.5px solid #e5e5e5;border-radius:14px;cursor:pointer;color:#222">${o}</button>`;
+    h+=`<button onclick="pCond(${i})" style="width:100%;padding:16px;text-align:center;font-size:17px;line-height:1.5;background:${INPUT_BG};border:1.5px solid ${BORDER};border-radius:14px;cursor:pointer;color:${TXT}">${o}</button>`;
   });
   h+=`</div>`;
-  h+=`<div style="margin-top:20px;padding:14px 16px;font-size:14px;line-height:1.7;background:#f5f7fa;border-radius:12px;color:#888">💡 ${c.info}</div>`;
+  h+=`<div style="margin-top:20px;padding:14px 16px;font-size:14px;line-height:1.7;background:${CARD};border:1px solid ${BORDER};border-radius:12px;color:${DIM}">💡 ${c.info}</div>`;
   $.innerHTML=h;
 }
 function pCond(i){
@@ -169,24 +210,24 @@ function rCondR(){
   const allPass=fail===0;
   let h=`<div style="text-align:center;margin-bottom:36px;padding-top:16px">
     <div style="font-size:48px;margin-bottom:12px">${allPass?"✅":"⚠️"}</div>
-    <h2 style="font-size:24px;font-weight:900;margin-bottom:8px">${em} ${nm} 지원조건</h2>
-    <div style="font-size:18px;font-weight:700;color:${allPass?'#0F766E':'#DC2626'}">${allPass?`모든 조건 충족 (${pass}/${qs.length})`:`미충족 항목 ${fail}건`}</div>
+    <h2 style="font-size:24px;font-weight:900;margin-bottom:8px;color:${TXT}">${em} ${nm} 지원조건</h2>
+    <div style="font-size:18px;font-weight:700;color:${allPass?'#4ade80':'#f87171'}">${allPass?`모든 조건 충족 (${pass}/${qs.length})`:`미충족 항목 ${fail}건`}</div>
   </div>`;
   details.forEach(d=>{
-    h+=`<div style="padding:16px;margin-bottom:10px;border-radius:12px;background:${d.ok?'#F0FDF4':'#FEF2F2'};border:1px solid ${d.ok?'#BBF7D0':'#FECACA'}">
+    h+=`<div style="padding:16px;margin-bottom:10px;border-radius:12px;background:${d.ok?'#052e16':'#450a0a'};border:1px solid ${d.ok?'#166534':'#991b1b'}">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
         <span style="font-size:16px">${d.ok?"✅":"❌"}</span>
-        <span style="font-size:15px;font-weight:700;color:${d.ok?'#166534':'#991B1B'}">${d.ok?"충족":"미충족"}</span>
+        <span style="font-size:15px;font-weight:700;color:${d.ok?'#4ade80':'#f87171'}">${d.ok?"충족":"미충족"}</span>
       </div>
-      <div style="font-size:15px;font-weight:600;margin-bottom:6px;color:#333;line-height:1.5">${d.q}</div>
-      <div style="font-size:14px;color:#666">→ ${d.ans}</div>
-      ${!d.ok?`<div style="font-size:13px;color:#991B1B;margin-top:8px;padding-top:8px;border-top:1px solid #FECACA">💡 ${d.info}</div>`:""}
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px;color:${TXT};line-height:1.5">${d.q}</div>
+      <div style="font-size:14px;color:#a1a1aa">→ ${d.ans}</div>
+      ${!d.ok?`<div style="font-size:13px;color:#fca5a5;margin-top:8px;padding-top:8px;border-top:1px solid #991b1b">💡 ${d.info}</div>`:""}
     </div>`;
   });
   if(cType==="tips"){
-    h+=`<div style="padding:18px;margin:20px 0;border-radius:14px;background:#FDF2F8;border:1px solid #FBCFE8">
+    h+=`<div style="padding:18px;margin:20px 0;border-radius:14px;background:#500724;border:1px solid #831843">
       <div style="font-size:16px;font-weight:800;color:${TP};margin-bottom:10px">🩷 2026 TIPS 지원 요약</div>
-      <div style="font-size:14px;color:#555;line-height:1.9">
+      <div style="font-size:14px;color:#d4d4d8;line-height:1.9">
         📌 일반트랙: R&D 최대 <b>8억원</b> (24개월)<br>
         📌 딥테크트랙: R&D 최대 <b>15억원</b> (36개월)<br>
         📌 비R&D 연계: 사업화+마케팅 최대 <b>3억원</b><br>
@@ -195,9 +236,9 @@ function rCondR(){
         📌 접수: <b>분기별</b> 접수
       </div></div>`;
   }else{
-    h+=`<div style="padding:18px;margin:20px 0;border-radius:14px;background:#FFF7ED;border:1px solid #FED7AA">
+    h+=`<div style="padding:18px;margin:20px 0;border-radius:14px;background:#431407;border:1px solid #9a3412">
       <div style="font-size:16px;font-weight:800;color:${LP};margin-bottom:10px">🧡 2026 LIPS 지원 요약</div>
-      <div style="font-size:14px;color:#555;line-height:1.9">
+      <div style="font-size:14px;color:#d4d4d8;line-height:1.9">
         📌 LIPS Ⅰ: 투자금 최대 5배, <b>최대 5억</b> 매칭융자<br>
         📌 LIPS Ⅱ 시드: 투자 3천만+, <b>최대 1억</b> 보조금<br>
         📌 LIPS Ⅱ 스케일업: 투자 5천만+, <b>최대 2억</b> 보조금<br>
@@ -206,11 +247,13 @@ function rCondR(){
         📌 운영사: <b>60개사</b> / 소상공인: <b>300개사</b>
       </div></div>`;
   }
-  h+=`<button class="btn" onclick="ph='home';R()" style="background:#f0f0f0;color:#555;border:1.5px solid #ddd">🏠 첫 화면</button>`;
+  h+=`<div class="disclaimer">${DISC}</div>`;
+  h+=`<div style="margin-top:20px"></div>`;
+  h+=`<button class="btn" onclick="ph='home';R()" style="background:${CARD};color:${TXT};border:1.5px solid ${BORDER}">🏠 첫 화면</button>`;
   h+=`<button class="btn" onclick="ph='fit';st=0;ans={};dO=false;R()" style="background:${B};color:#fff">🔍 적합도 테스트</button>`;
   const oT=cType==="tips"?"lips":"tips",oN=cType==="tips"?"LIPS":"TIPS",oP=cType==="tips"?LP:TP,oE=cType==="tips"?"🧡":"🩷";
   h+=`<button class="btn" onclick="startCond('${oT}')" style="background:${oP};color:#fff">${oE} ${oN} 지원조건 체크</button>`;
-  h+=`<div style="text-align:center;font-size:13px;color:#bbb;padding:12px 0">MAR 2026 by TAP</div>`;
+  h+=`<div style="text-align:center;font-size:13px;color:#3f3f46;padding:12px 0">MAR 2026 by TAP</div>`;
   $.innerHTML=h;
 }
 R();
