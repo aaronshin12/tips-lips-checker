@@ -106,8 +106,8 @@ function rHome(){
     <h1 style="font-size:30px;font-weight:900;line-height:1.35;color:${TXT}">📋 TIPS / LIPS<br>검토 체크리스트</h1>
   </div>
   <button class="btn" onclick="ph='fit';st=0;ans={};dO=false;R()" style="background:${B};color:#fff;font-size:20px;padding:20px 0">🔍 TIPS/LIPS 적합도 테스트</button>
-  <button class="btn" onclick="startCond('tips')" style="background:${TP};color:#fff">🩷 TIPS 지원조건 체크</button>
-  <button class="btn" onclick="startCond('lips')" style="background:${LP};color:#fff">🧡 LIPS 지원조건 체크</button>
+  <button class="btn" onclick="startCond('tips')" style="background:${TP};color:#fff">🔬 TIPS 지원조건 체크</button>
+  <button class="btn" onclick="startCond('lips')" style="background:${LP};color:#fff">🦁 LIPS 지원조건 체크</button>
   <div style="text-align:center;margin-top:36px;font-size:13px;color:#3f3f46">MAR 2026 by TAP</div>`;
 }
 function startCond(type){cType=type;cAns=[];st=0;ph="cond";R()}
@@ -153,16 +153,16 @@ function rFitR(){
   const tC=ty=>ty==="l"?LP:ty==="t"?TP:"#6b7280";
   const tL=ty=>ty==="l"?"LIPS형":ty==="t"?"TIPS형":"복합";
   let h=`<div style="text-align:center;margin-bottom:40px;padding-top:16px"><div style="font-size:15px;font-weight:700;color:${B};margin-bottom:8px">🔍 판독 완료</div><h2 style="font-size:26px;font-weight:900;color:${TXT}">적합도 결과</h2></div>`;
-  h+=gBar(t,"🩷 TIPS 적합도",TP);
-  h+=gBar(l,"🧡 LIPS 적합도",LP);
+  h+=gBar(t,"🔬 TIPS 적합도",TP);
+  h+=gBar(l,"🦁 LIPS 적합도",LP);
   h+=`<div style="border:1.5px solid ${BORDER};border-radius:14px;margin-bottom:28px;overflow:hidden"><button onclick="dO=!dO;R()" style="width:100%;padding:18px 22px;font-size:17px;font-weight:700;background:${CARD};color:${TXT};border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center"><span>📝 항목별 응답 내역</span><span style="font-size:14px;color:${DIM};display:inline-block;transform:rotate(${dO?180:0}deg)">▼</span></button>`;
   if(dO){h+=`<div style="padding:4px 22px 18px;background:${CARD}">`;FQ.filter(q=>ans[q.id]).forEach(q=>{const a=ans[q.id],o=q.o.find(x=>x.y===a);h+=`<div style="padding:14px 0;border-bottom:1px solid ${BORDER};font-size:16px;line-height:1.6"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:700;color:${TXT}">${q.lb}</span><span style="font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px;background:${tBg(a)};color:${tC(a)}">${tL(a)}</span></div><div style="color:${DIM};font-size:15px">${fl(o.t)}</div></div>`});h+=`</div>`}
   h+=`</div>`;
   h+=`<div class="disclaimer">${DISC}</div>`;
   h+=`<div style="margin-top:20px"></div>`;
   h+=`<button class="btn" onclick="ph='home';R()" style="background:${CARD};color:${TXT};border:1.5px solid ${BORDER}">🏠 첫 화면</button>`;
-  h+=`<button class="btn" onclick="startCond('tips')" style="background:${TP};color:#fff">🩷 TIPS 지원조건 체크</button>`;
-  h+=`<button class="btn" onclick="startCond('lips')" style="background:${LP};color:#fff">🧡 LIPS 지원조건 체크</button>`;
+  h+=`<button class="btn" onclick="startCond('tips')" style="background:${TP};color:#fff">🔬 TIPS 지원조건 체크</button>`;
+  h+=`<button class="btn" onclick="startCond('lips')" style="background:${LP};color:#fff">🦁 LIPS 지원조건 체크</button>`;
   h+=`<div style="text-align:center;font-size:13px;color:#3f3f46;padding:12px 0">MAR 2026 by TAP</div>`;
   $.innerHTML=h;
 }
@@ -172,7 +172,7 @@ function getCQ(){return cType==="tips"?TQ:LQ}
 function rCond(){
   const qs=getCQ(),c=qs[st],tot=qs.length,pct=(st/tot)*100;
   const pc=cType==="tips"?TP:LP;
-  const em=cType==="tips"?"🩷":"🧡";
+  const em=cType==="tips"?"🔬":"🦁";
   const nm=cType==="tips"?"TIPS":"LIPS";
   let h=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span style="font-size:16px;font-weight:700;color:${pc}">${em} ${nm} ${st+1}/${tot}</span>
@@ -198,7 +198,7 @@ function pCond(i){
 /* CONDITION RESULT */
 function rCondR(){
   const qs=getCQ(),pc=cType==="tips"?TP:LP;
-  const em=cType==="tips"?"🩷":"🧡";
+  const em=cType==="tips"?"🔬":"🦁";
   const nm=cType==="tips"?"TIPS":"LIPS";
   let pass=0,fail=0,details=[];
   qs.forEach((q,i)=>{
@@ -226,7 +226,7 @@ function rCondR(){
   });
   if(cType==="tips"){
     h+=`<div style="padding:18px;margin:20px 0;border-radius:14px;background:#500724;border:1px solid #831843">
-      <div style="font-size:16px;font-weight:800;color:${TP};margin-bottom:10px">🩷 2026 TIPS 지원 요약</div>
+      <div style="font-size:16px;font-weight:800;color:${TP};margin-bottom:10px">🔬 2026 TIPS 지원 요약</div>
       <div style="font-size:14px;color:#d4d4d8;line-height:1.9">
         📌 일반트랙: R&D 최대 <b>8억원</b> (24개월)<br>
         📌 딥테크트랙: R&D 최대 <b>15억원</b> (36개월)<br>
@@ -237,7 +237,7 @@ function rCondR(){
       </div></div>`;
   }else{
     h+=`<div style="padding:18px;margin:20px 0;border-radius:14px;background:#431407;border:1px solid #9a3412">
-      <div style="font-size:16px;font-weight:800;color:${LP};margin-bottom:10px">🧡 2026 LIPS 지원 요약</div>
+      <div style="font-size:16px;font-weight:800;color:${LP};margin-bottom:10px">🦁 2026 LIPS 지원 요약</div>
       <div style="font-size:14px;color:#d4d4d8;line-height:1.9">
         📌 LIPS Ⅰ: 투자금 최대 5배, <b>최대 5억</b> 매칭융자<br>
         📌 LIPS Ⅱ 시드: 투자 3천만+, <b>최대 1억</b> 보조금<br>
@@ -251,7 +251,7 @@ function rCondR(){
   h+=`<div style="margin-top:20px"></div>`;
   h+=`<button class="btn" onclick="ph='home';R()" style="background:${CARD};color:${TXT};border:1.5px solid ${BORDER}">🏠 첫 화면</button>`;
   h+=`<button class="btn" onclick="ph='fit';st=0;ans={};dO=false;R()" style="background:${B};color:#fff">🔍 적합도 테스트</button>`;
-  const oT=cType==="tips"?"lips":"tips",oN=cType==="tips"?"LIPS":"TIPS",oP=cType==="tips"?LP:TP,oE=cType==="tips"?"🧡":"🩷";
+  const oT=cType==="tips"?"lips":"tips",oN=cType==="tips"?"LIPS":"TIPS",oP=cType==="tips"?LP:TP,oE=cType==="tips"?"🦁":"🔬";
   h+=`<button class="btn" onclick="startCond('${oT}')" style="background:${oP};color:#fff">${oE} ${oN} 지원조건 체크</button>`;
   h+=`<div style="text-align:center;font-size:13px;color:#3f3f46;padding:12px 0">MAR 2026 by TAP</div>`;
   $.innerHTML=h;
