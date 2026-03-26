@@ -32,22 +32,22 @@ const FQ=[
 ];
 /* ===== TIPS CONDITION Qs ===== */
 const TQ=[
-{q:"🏢 팁스 운영사로부터 투자를 받았거나 받을 예정인가요?",o:["예","아니요"],pass:0,info:"팁스는 운영사의 선투자+추천이 필수입니다."},
-{q:"💰 투자 규모는 어떻게 되나요?",o:["수도권 2억원 이상","비수도권 1억원 이상","미달"],pass:[0,1],info:"수도권은 2억원, 비수도권은 1억원 이상 필요합니다."},
-{q:"📅 창업 후 업력이 어떻게 되나요?",o:["7년 이내","7~10년 (신산업 분야)","10년 초과"],pass:[0,1],info:"일반 7년, 12대 신산업 분야는 10년까지 가능합니다."},
-{q:"🔬 기술 기반의 R&D 과제를 수행할 역량이 있나요?",o:["예","아니요"],pass:0,info:"팁스 R&D 최대 8억원 (24개월) 수행 능력이 필요합니다."},
-{q:"🏭 중소기업기본법상 중소기업에 해당하나요?",o:["예","아니요"],pass:0,info:"중소기업 요건을 충족해야 합니다."},
-{q:"📋 정부 R&D 과제 동시 수행 제한에 해당하나요?",o:["해당 없음 (지원 가능)","해당됨 (제한 사업 참여 중)"],pass:0,info:"동일연도 동시수행 제한 사업 확인이 필요합니다."}
+{id:"t1",q:"🏢 팁스 운영사로부터 투자를 받았거나 받을 예정인가요?",o:["예","아니요"],pass:0,info:"팁스는 운영사의 선투자+추천이 필수입니다."},
+{id:"t2",q:"💰 투자 규모는 어떻게 되나요?",o:["수도권 2억원 이상","비수도권 1억원 이상","미달"],pass:[0,1],info:"수도권은 2억원, 비수도권은 1억원 이상 필요합니다.",skip:function(){return cAns[0]===1}},
+{id:"t3",q:"📅 창업 후 업력이 어떻게 되나요?",o:["7년 이내","7~10년 (신산업 분야)","10년 초과"],pass:[0,1],info:"일반 7년, 12대 신산업 분야는 10년까지 가능합니다."},
+{id:"t4",q:"🔬 기술 기반의 R&D 과제를 수행할 역량이 있나요?",o:["예","아니요"],pass:0,info:"팁스 R&D 최대 8억원 (24개월) 수행 능력이 필요합니다."},
+{id:"t5",q:"🏭 중소기업기본법상 중소기업에 해당하나요?",o:["예","아니요"],pass:0,info:"중소기업 요건을 충족해야 합니다."},
+{id:"t6",q:"📋 정부 R&D 과제 동시 수행 제한에 해당하나요?",o:["해당 없음 (지원 가능)","해당됨 (제한 사업 참여 중)"],pass:0,info:"동일연도 동시수행 제한 사업 확인이 필요합니다."}
 ];
 /* ===== LIPS CONDITION Qs ===== */
 const LQ=[
-{q:"🏢 LIPS 운영사로부터 선투자를 받았나요?",o:["예","아니요"],pass:0,info:"운영사의 선투자 유치가 필수입니다."},
-{q:"📅 투자 유치 시점이 공고일 기준 3년 이내인가요?",o:["예","아니요"],pass:0,info:"3년 이내 투자 유치 실적이 필요합니다."},
-{q:"📑 소상공인기본법 제2조의 소상공인 기준을 충족하나요?",o:["예","아니요"],pass:0,info:"소상공인 요건을 충족하는 개인/법인 사업자여야 합니다."},
-{q:"🗓️ 업력이 1년 이상인가요?",o:["예","아니요"],pass:0,info:"2026년부터 최소 업력 1년 기준이 신설되었습니다."},
-{q:"💰 어떤 LIPS 트랙에 관심이 있나요?",o:["LIPS Ⅰ (매칭융자, 최대 5억)","LIPS Ⅱ 시드 (보조금, 최대 1억)","LIPS Ⅱ 스케일업 (보조금, 최대 2억)"],pass:[0,1,2],info:"LIPS Ⅰ은 융자, LIPS Ⅱ는 사업화 보조금입니다."},
-{q:"💵 운영사 투자금 규모는?",o:["5천만원 이상","3천만원~5천만원 미만","3천만원 미만"],pass:[0,1],info:"LIPS Ⅱ 시드는 3천만원+, 스케일업은 5천만원+ 필요합니다."},
-{q:"🚫 정책자금 융자 제외 업종에 해당하나요?",o:["해당 없음 (지원 가능)","해당됨 (제외 업종)"],pass:0,info:"제외 업종은 지원 불가합니다."}
+{id:"l1",q:"🏢 LIPS 운영사로부터 선투자를 받았나요?",o:["예","아니요"],pass:0,info:"운영사의 선투자 유치가 필수입니다."},
+{id:"l2",q:"📅 투자 유치 시점이 공고일 기준 3년 이내인가요?",o:["예","아니요"],pass:0,info:"3년 이내 투자 유치 실적이 필요합니다.",skip:function(){return cAns[0]===1}},
+{id:"l3",q:"📑 소상공인기본법 제2조의 소상공인 기준을 충족하나요?",o:["예","아니요"],pass:0,info:"소상공인 요건을 충족하는 개인/법인 사업자여야 합니다."},
+{id:"l4",q:"🗓️ 업력이 1년 이상인가요?",o:["예","아니요"],pass:0,info:"2026년부터 최소 업력 1년 기준이 신설되었습니다."},
+{id:"l5",q:"💰 어떤 LIPS 트랙에 관심이 있나요?",o:["LIPS Ⅰ (매칭융자, 최대 5억)","LIPS Ⅱ 시드 (보조금, 최대 1억)","LIPS Ⅱ 스케일업 (보조금, 최대 2억)"],pass:[0,1,2],info:"LIPS Ⅰ은 융자, LIPS Ⅱ는 사업화 보조금입니다."},
+{id:"l6",q:"💵 운영사 투자금 규모는?",o:["5천만원 이상","3천만원~5천만원 미만","3천만원 미만"],pass:[0,1],info:"LIPS Ⅱ 시드는 3천만원+, 스케일업은 5천만원+ 필요합니다.",skip:function(){return cAns[0]===1}},
+{id:"l7",q:"🚫 정책자금 융자 제외 업종에 해당하나요?",o:["해당 없음 (지원 가능)","해당됨 (제외 업종)"],pass:0,info:"제외 업종은 지원 불가합니다."}
 ];
 
 let ph="home",st=0,ans={},dO=false,cAns=[],cType="";
@@ -72,8 +72,8 @@ function rHome(){
     <h1 style="font-size:30px;font-weight:900;line-height:1.35">📋 TIPS / LIPS<br>검토 체크리스트</h1>
   </div>
   <button class="btn" onclick="ph='fit';st=0;ans={};dO=false;R()" style="background:${B};color:#fff;font-size:20px;padding:20px 0">🔍 TIPS/LIPS 적합도 테스트</button>
-  <button class="btn" onclick="cType='tips';cAns=[];st=0;ph='cond';R()" style="background:${TP};color:#fff">🩷 TIPS 지원조건 체크</button>
-  <button class="btn" onclick="cType='lips';cAns=[];st=0;ph='cond';R()" style="background:${LP};color:#fff">🧡 LIPS 지원조건 체크</button>
+  <button class="btn" onclick="cType='tips';cAns=new Array(TQ.length).fill(null);st=0;ph='cond';R()" style="background:${TP};color:#fff">🩷 TIPS 지원조건 체크</button>
+  <button class="btn" onclick="cType='lips';cAns=new Array(LQ.length).fill(null);st=0;ph='cond';R()" style="background:${LP};color:#fff">🧡 LIPS 지원조건 체크</button>
   <div style="text-align:center;margin-top:36px;font-size:13px;color:#bbb">MAR 2026 by TAP</div>`;
 }
 /* FIT TEST */
@@ -122,8 +122,8 @@ function rFitR(){
   if(dO){h+=`<div style="padding:4px 22px 18px">`;FQ.filter(q=>ans[q.id]).forEach(q=>{const a=ans[q.id],o=q.o.find(x=>x.y===a);h+=`<div style="padding:14px 0;border-bottom:1px solid #e5e5e5;font-size:16px;line-height:1.6"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-weight:700">${q.lb}</span><span style="font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px;background:${tBg(a)};color:${tC(a)}">${tL(a)}</span></div><div style="color:#777;font-size:15px">${fl(o.t)}</div></div>`});h+=`</div>`}
   h+=`</div>`;
   h+=`<button class="btn" onclick="ph='home';R()" style="background:#f0f0f0;color:#555;border:1.5px solid #ddd">🏠 첫 화면</button>`;
-  h+=`<button class="btn" onclick="cType='tips';cAns=[];st=0;ph='cond';R()" style="background:${TP};color:#fff">🩷 TIPS 지원조건 체크</button>`;
-  h+=`<button class="btn" onclick="cType='lips';cAns=[];st=0;ph='cond';R()" style="background:${LP};color:#fff">🧡 LIPS 지원조건 체크</button>`;
+  h+=`<button class="btn" onclick="cType='tips';cAns=new Array(TQ.length).fill(null);st=0;ph='cond';R()" style="background:${TP};color:#fff">🩷 TIPS 지원조건 체크</button>`;
+  h+=`<button class="btn" onclick="cType='lips';cAns=new Array(LQ.length).fill(null);st=0;ph='cond';R()" style="background:${LP};color:#fff">🧡 LIPS 지원조건 체크</button>`;
   h+=`<div style="text-align:center;font-size:13px;color:#bbb;padding:12px 0">MAR 2026 by TAP</div>`;
   $.innerHTML=h;
 }
@@ -163,9 +163,10 @@ function rCondR(){
   let pass=0,fail=0,details=[];
   qs.forEach((q,i)=>{
     const a=cAns[i];
-    const ok=Array.isArray(q.pass)?q.pass.includes(a):q.pass===a;
+    const skipped=a===null||a===undefined;
+    const ok=skipped?false:(Array.isArray(q.pass)?q.pass.includes(a):q.pass===a);
     if(ok)pass++;else fail++;
-    details.push({q:q.q,ans:q.o[a],ok,info:q.info});
+    details.push({q:q.q,ans:skipped?"(투자 미유치로 해당 없음)":q.o[a],ok,skipped,info:q.info});
   });
   const allPass=fail===0;
   let h=`<div style="text-align:center;margin-bottom:36px;padding-top:16px">
@@ -213,7 +214,7 @@ function rCondR(){
   const otherNm=cType==="tips"?"LIPS":"TIPS";
   const otherPc=cType==="tips"?LP:TP;
   const otherEm=cType==="tips"?"🧡":"🩷";
-  h+=`<button class="btn" onclick="cType='${otherType}';cAns=[];st=0;ph='cond';R()" style="background:${otherPc};color:#fff">${otherEm} ${otherNm} 지원조건 체크</button>`;
+  h+=`<button class="btn" onclick="cType='${otherType}';cAns=new Array(${otherType==='tips'?'TQ':'LQ'}.length).fill(null);st=0;ph='cond';R()" style="background:${otherPc};color:#fff">${otherEm} ${otherNm} 지원조건 체크</button>`;
   h+=`<div style="text-align:center;font-size:13px;color:#bbb;padding:12px 0">MAR 2026 by TAP</div>`;
   $.innerHTML=h;
 }
