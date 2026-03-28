@@ -13,7 +13,6 @@ button,a{font-family:inherit}
 .btn:active{opacity:.8}
 .btn-sm{width:100%;padding:12px 16px;font-size:15px;font-weight:500;border-radius:10px;cursor:pointer;margin-bottom:8px;text-align:center;transition:opacity .15s}
 .btn-sm:active{opacity:.8}
-.disc{padding:12px 16px;font-size:12px;line-height:1.7;color:#2D2B28;background:#F5F3EF;border-radius:10px;text-align:center}
 .divider{height:1px;background:#E8E4DD;margin:16px 0}
 .radio{width:20px;height:20px;border-radius:50%;flex-shrink:0;box-sizing:border-box}
 .opt{width:100%;padding:14px 18px;margin-bottom:8px;font-size:16px;line-height:1.5;text-align:left;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:12px}
@@ -91,8 +90,10 @@ function calc(){let l=0,t=0;FQ.forEach(q=>{const a=ans[q.id];if(!a)return;const 
 function gr(s,mx){const p=Math.max(0,s)/mx*100;if(p>=75)return{k:"f",l:"적합",d:"해당 프로그램에 높은 부합도"};if(p>=50)return{k:"p",l:"긍정적",d:"방향성은 맞으나 일부 경계 요소"};if(p>=25)return{k:"n",l:"부정적",d:"프로그램과 방향 불일치 다수"};return{k:"u",l:"부적합",d:"해당 프로그램 대상이 아님"}}
 const STP=[{k:"u",l:"부적합"},{k:"n",l:"부정적"},{k:"p",l:"긍정적"},{k:"f",l:"적합"}];
 
+let _noScroll=false;
 function R(){
-  window.scrollTo(0,0);
+  if(!_noScroll)window.scrollTo(0,0);
+  _noScroll=false;
   if(ph==="home")rHome();else if(ph==="fit")rFit();else if(ph==="fitR")rFitR();
   else if(ph==="cond")rCond();else if(ph==="condR")rCondR();
 }
@@ -125,8 +126,9 @@ function rHome(){
       </button>
     </div>
   </div>
-  <div class="disc">${DISC}</div>
-  <div style="text-align:center;margin-top:16px;font-size:12px;color:${DIM}">MAR 2026 by TAP</div>`;
+  <div style="height:48px"></div>
+  <div style="text-align:center;font-size:12px;color:${DIM}">MAR 2026 by TAP</div>
+  <div style="text-align:center;font-size:10px;color:${DIM};line-height:1.7;padding:4px 0">${DISC}</div>`;
 }
 
 /* FIT TEST */
@@ -159,11 +161,16 @@ function pFit(id,ty){
   const nv=vis();
   if(st+1>=nv.length){ph="fitR";R()}else{st++;R()}
 }
+function copyFitAnswers(){
+  const tL=ty=>ty==="l"?"LIPS형":ty==="t"?"TIPS형":"복합";
+  let txt=FQ.filter(q=>ans[q.id]).map(q=>{const a=ans[q.id],o=q.o.find(x=>x.y===a);return q.lb+" ["+tL(a)+"]\n→ "+fl(o.t)}).join("\n\n");
+  navigator.clipboard.writeText(txt).then(()=>{alert("응답 내역이 복사되었습니다.")}).catch(()=>{alert("복사에 실패했습니다.")});
+}
 
 /* FIT RESULT */
 function gBar(sc,mx,lb,pc){
   const g=gr(sc,mx),s=Math.max(0,sc);
-  let h=`<div style="margin-bottom:28px"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><span style="font-size:18px;font-weight:700;color:${pc}">${lb}</span><span style="font-size:16px;font-weight:600;color:${pc}">${s}/${mx}</span></div><div style="display:flex;gap:5px">`;
+  let h=`<div style="margin-bottom:28px"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><span style="font-size:18px;font-weight:700;color:${pc}">${lb}</span></div><div style="display:flex;gap:5px">`;
   STP.forEach(x=>{const a=x.k===g.k;h+=`<div style="flex:1;padding:8px 0;text-align:center;border-radius:8px;font-size:13px;font-weight:${a?700:500};background:${a?pc:CALT};color:${a?'#fff':DIM};${a?'':`border:1px solid ${BD}`}">${x.l}</div>`});
   h+=`</div></div>`;return h;
 }
@@ -176,10 +183,7 @@ function rFitR(){
   h+=gBar(t,mx,"🔬 TIPS 적합도",TP);
   h+=gBar(l,mx,"🦁 LIPS 적합도",LP);
   // Dropdown: detail
-  h+=`<div style="border:1.5px solid ${BD};border-radius:12px;margin-bottom:20px;overflow:hidden"><button onclick="dO=!dO;R()" style="width:100%;padding:14px 20px;font-size:15px;font-weight:600;background:${CALT};color:${SUB};border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center"><span>📝 항목별 응답 내역</span><span style="font-size:14px;color:${DIM};display:inline-block;transform:rotate(${dO?180:0}deg)">▼</span></button>`;
-  if(dO){h+=`<div style="padding:4px 20px 16px;background:${CARD}">`;FQ.filter(q=>ans[q.id]).forEach(q=>{const a=ans[q.id],o=q.o.find(x=>x.y===a);h+=`<div style="padding:12px 0;border-bottom:1px solid ${BD};font-size:14px;line-height:1.6"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-weight:700;color:${TXT}">${q.lb}</span><span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:${tBg(a)};color:${tC(a)}">${tL(a)}</span></div><div style="color:${DIM};font-size:13px">${fl(o.t)}</div></div>`});h+=`</div>`}
-  h+=`</div>`;
-  h+=`<div class="disc">${DISC}</div><div class="divider"></div>`;
+  h+=`<button onclick="copyFitAnswers()" style="width:100%;padding:14px 20px;font-size:15px;font-weight:600;background:${CALT};color:${SUB};border:1.5px solid ${BD};border-radius:12px;cursor:pointer;margin-bottom:20px;text-align:center">📝 항목별 나의 응답 내역 복사하기</button>`;
   // Circle nav
   const tipsH=t>=l,lipsH=l>=t;
   h+=`<div style="display:flex;justify-content:center;gap:24px;margin-bottom:20px">`;
@@ -192,7 +196,9 @@ function rFitR(){
   });
   h+=`</div>`;
   h+=ctaBtn()+infoBtn();
+  h+=`<div style="height:48px"></div>`;
   h+=`<div style="text-align:center;font-size:12px;color:${DIM};padding:8px 0">MAR 2026 by TAP</div>`;
+  h+=`<div style="text-align:center;font-size:10px;color:${DIM};line-height:1.7;padding:4px 0">${DISC}</div>`;
   $.innerHTML=h;
 }
 
@@ -235,16 +241,14 @@ function rCondR(){
         <div><div style="font-size:15px;color:${TXT};line-height:1.5">${d.q}</div>
         <div style="font-size:13px;color:${DIM};margin-top:2px">→ ${fl(d.ans)}</div></div></div>`;
     }else{
-      h+=`<div style="padding:16px;margin:10px 0;border-radius:12px;background:#fef5f5;border:1px solid #fcd5d5">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span>❌</span><span style="font-size:14px;font-weight:700;color:#c53030">미충족</span></div>
-        <div style="font-size:15px;font-weight:600;color:${TXT};line-height:1.5;margin-bottom:4px">${d.q}</div>
-        <div style="font-size:14px;color:${SUB}">→ ${fl(d.ans)}</div>
-        <div style="font-size:13px;color:#c53030;margin-top:8px;padding-top:8px;border-top:1px solid #fcd5d5">💡 ${d.info}</div>
-      </div>`;
+      h+=`<div style="padding:12px 0;border-bottom:1px solid ${BD};display:flex;align-items:flex-start;gap:8px">
+        <span style="font-size:14px;margin-top:1px">❌</span>
+        <div><div style="font-size:15px;color:${TXT};line-height:1.5">${d.q}</div>
+        <div style="font-size:13px;color:${DIM};margin-top:2px">→ ${fl(d.ans)}</div></div></div>`;
     }
   });
   // Summary dropdown
-  h+=`<div style="border:1.5px solid ${BD};border-radius:12px;margin:20px 0;overflow:hidden"><button onclick="csO=!csO;R()" style="width:100%;padding:14px 20px;font-size:15px;font-weight:600;background:${CALT};color:${SUB};border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center"><span>📌 2026 ${nm} 지원 요약</span><span style="font-size:14px;color:${DIM};display:inline-block;transform:rotate(${csO?180:0}deg)">▼</span></button>`;
+  h+=`<div style="border:1.5px solid ${BD};border-radius:12px;margin:20px 0;overflow:hidden"><button onclick="_noScroll=true;csO=!csO;R()" style="width:100%;padding:14px 20px;font-size:15px;font-weight:600;background:${CALT};color:${SUB};border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center"><span>📌 2026 ${nm} 지원 요약</span><span style="font-size:14px;color:${DIM};display:inline-block;transform:rotate(${csO?180:0}deg)">▼</span></button>`;
   if(csO){
     if(cType==="tips"){
       h+=`<div style="padding:16px 20px;font-size:14px;color:${SUB};line-height:1.9;background:${CARD}">
@@ -255,13 +259,14 @@ function rCondR(){
     }
   }
   h+=`</div>`;
-  h+=`<div class="disc">${DISC}</div><div class="divider"></div>`;
   // Cross-link
   const oT=cType==="tips"?"lips":"tips",oN=cType==="tips"?"LIPS":"TIPS",oPC=cType==="tips"?LP:TP,oPCL=cType==="tips"?LPL:TPL,oE=cType==="tips"?"🦁":"🔬";
   h+=`<button class="btn" onclick="startCond('${oT}')" style="background:${oPCL};border:1.5px solid ${oPC}22;color:${oPC};justify-content:center"><span>${oE}</span><span>${oN} 지원조건도 확인해보세요</span></button>`;
   h+=ctaBtn()+infoBtn();
   h+=`<button class="btn-sm" onclick="ph='home';R()" style="background:transparent;border:1px solid ${BD};color:${DIM}">🏠 첫 화면</button>`;
+  h+=`<div style="height:48px"></div>`;
   h+=`<div style="text-align:center;font-size:12px;color:${DIM};padding:8px 0">MAR 2026 by TAP</div>`;
+  h+=`<div style="text-align:center;font-size:10px;color:${DIM};line-height:1.7;padding:4px 0">${DISC}</div>`;
   $.innerHTML=h;
 }
 R();
