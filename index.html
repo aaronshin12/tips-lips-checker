@@ -24,7 +24,7 @@ button,a{font-family:inherit}
 <script>
 const CARD="#FFFFFF",CALT="#F5F3EF",BD="#E8E4DD",TXT="#2D2B28",SUB="#5C5A56",DIM="#9B9790",
 BR="#C96442",BRL="#F5E6DE",TP="#9E3B6E",TPL="#F3E0EC",TPM="#C75A90",LP="#B5621A",LPL="#FBE9D5",LPM="#D4802E";
-const DISC="⚠️ 본 결과는 참고용 사전 스크리닝이며, 공식 심사 판정이 아닙니다.";
+const DISC="⚠️ 본 결과는 참고용 사전 스크리닝이며,<br>공식 심사 판정이 아닙니다.";
 /* ============================================================
    🔗 CTA URL — 외부 상담 연결 링크
    ============================================================ */
@@ -165,7 +165,7 @@ function gBar(sc,mx,lb,pc){
   const g=gr(sc,mx),s=Math.max(0,sc);
   let h=`<div style="margin-bottom:28px"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><span style="font-size:18px;font-weight:700;color:${pc}">${lb}</span><span style="font-size:16px;font-weight:600;color:${pc}">${s}/${mx}</span></div><div style="display:flex;gap:5px">`;
   STP.forEach(x=>{const a=x.k===g.k;h+=`<div style="flex:1;padding:8px 0;text-align:center;border-radius:8px;font-size:13px;font-weight:${a?700:500};background:${a?pc:CALT};color:${a?'#fff':DIM};${a?'':`border:1px solid ${BD}`}">${x.l}</div>`});
-  h+=`</div><div style="font-size:14px;color:${pc};font-weight:600;margin-top:10px">${g.d}</div></div>`;return h;
+  h+=`</div></div>`;return h;
 }
 function rFitR(){
   const{l,t}=calc(),mx=calcMax();
