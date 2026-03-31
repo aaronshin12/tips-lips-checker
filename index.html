@@ -65,6 +65,7 @@ const TQ=[
 {q:"창업 후 업력이 어떻게 되나요?",o:["7년 이내","7~10년 (12대 신산업 분야)","10년 초과"],pass:[0,1],info:"일반 7년, 12대 신산업 분야는 10년까지 가능."},
 {q:"기술 기반의 R&D 과제를 수행할 역량이 있나요?",o:["예","아니요"],pass:0,info:"팁스 R&D 최대 8억원 (24개월) 수행 능력 필요."},
 {q:"중소기업기본법상 중소기업에 해당하나요?",o:["예","아니요"],pass:0,info:"중소기업 요건 충족 필수."},
+{q:"창업기업 확인서를 발급받았나요?",o:["예, 발급 완료","아니요 / 잘 모르겠음"],pass:0,info:""},
 {q:"창업팀이 전체 지분의 60% 이상을 보유하고 있나요?",o:["예 (운영사 지분 30% 이하 유지)","아니요"],pass:0,info:"창업기업 구성원 2인 이상이 60%+ 보유, 운영사 30% 이하."},
 {q:"직전 연도 매출액이 20억원 미만인가요?",o:["예, 20억 미만","아니요, 20억 이상"],pass:0,info:"직전 연도 매출 20억원 미만 기업만 지원 가능."},
 {q:"기존에 팁스 R&D 사업에 선정된 이력이 있나요?",o:["없음 (첫 신청)","있음 (재참여 불가)"],pass:0,info:"일반·딥테크·글로벌·스케일업 팁스 기선정 기업은 재참여 불가."},
@@ -216,7 +217,7 @@ function rCond(){
   c.o.forEach((o,i)=>{
     h+=`<button onclick="pCond(${i})" class="opt" style="background:${CARD};border:1.5px solid ${BD};color:${TXT}"><span class="radio" style="border:2px solid ${BD}"></span><span style="white-space:pre-line">${o}</span></button>`;
   });
-  h+=`<div style="margin-top:16px;padding:12px 16px;font-size:14px;line-height:1.7;background:${CALT};border-radius:10px;color:${DIM}">💡 ${c.info}</div>`;
+  if(c.info)h+=`<div style="margin-top:16px;padding:12px 16px;font-size:14px;line-height:1.7;background:${CALT};border-radius:10px;color:${DIM}">💡 ${c.info}</div>`;
   $.innerHTML=h;
 }
 function pCond(i){cAns.push(i);const qs=getCQ();if(st+1>=qs.length){ph="condR";R()}else{st++;R()}}
